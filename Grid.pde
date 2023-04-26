@@ -23,7 +23,7 @@ public class Grid {
     //2. Add (or remove) the location of the card in selectedLocs
     //3. Add the card to (or remove from) the list of selectedCards
     public void updateSelected(int col, int row) {
-        Cardcard = board[col][row];
+        Card card = board[col][row];
         
         if (selectedCards.contains(card)) {
             int index = selectedCards.indexOf(card);
@@ -134,6 +134,22 @@ public class Grid {
     //the number of cardsInPlay has been increased by one
     public void addCardToBoard(Card card) {
         // YOU WRITE THIS
+        if (cardsInPlay == 12) 
+          return;
+        
+        else {
+          for (int col = 0; col < currentCols; col++) {
+            for (int row  = 0; row < ROWS; row++) {
+              Card cardAtLocation = board[col][row];
+              
+              if (!(cardAtLocation instanceof Card)) {
+                board[col][row] = card;
+                cardsInPlay++;
+                return;
+              }
+            }
+          }
+        }
 }
     
     public void addColumn() {
@@ -167,11 +183,11 @@ public class Grid {
         ArrayList<Location> locs = new ArrayList<Location>();
         for (int i = 0; i < currentCols * 3 - 2; i++) {
             for (int j = i + 1; j < currentCols * 3 - 1; j++) {
-                for (intk = j + 1; k < currentCols * 3; k++) {
+                for (int k = j + 1; k < currentCols * 3; k++) {
                    if (isSet(board[col(i)][row(i)], board[col(j)][row(j)], board[col(k)][row(k)])) {
-                        locs.add(newLocation(col(i), row(i)));
-                        locs.add(newLocation(col(j), row(j)));
-                        locs.add(newLocation(col(k), row(k)));
+                        locs.add(new Location(col(i), row(i)));
+                        locs.add(new Location(col(j), row(j)));
+                        locs.add(new Location(col(k), row(k)));
                         return locs;
                 }
                 }

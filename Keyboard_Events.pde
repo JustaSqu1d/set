@@ -22,7 +22,7 @@ public void keyPressed() {
     
     if("+=-_ ".indexOf(key) >= 0) {
         switch(key) {
-            case '' : togglePauseResume(); break;
+            case ' ' : togglePauseResume(); break;
             case '=':
                 case '+' : grid.addColumn(); break;
             case '_':

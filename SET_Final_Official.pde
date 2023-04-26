@@ -206,6 +206,28 @@ public void newGame() {
   // Every variable you need has already been created.  Just follow the directions.
 
   // YOUR_CODE_HERE
+  
+  deck = new Deck();
+  
+  grid = new Grid();
+  
+  score = 0;
+  
+  currentCols = 4;
+  
+  state = State.PLAYING;
+  
+  message = 0;
+  
+  for (int i = 0; i < currentCols * ROWS; i++) {
+    Card newCard = deck.deal();
+    grid.addCardToBoard(newCard);
+  }
+  
+  timeElapsed = 0;
+  
+  runningTimerStart = millis(); 
+  
 }
 
 public void initFonts() {
