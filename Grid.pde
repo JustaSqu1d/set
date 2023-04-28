@@ -56,6 +56,37 @@ public class Grid {
         // documentation on ArrayList to see how sort(null) works
         
         // YOU WRITE THIS
+
+        if (cardsInPlay > 12 || deck.size() == 0) {
+            // Remove the selected set-cards from the board
+            for (Location location : selectedLocs) {
+                board[location.getCol()][location.getRow()] = null;
+            }
+
+            for (Location locationToReplace : selectedLocs) {
+                // Find the last non-empty location in the grid
+                Location lastLocation = new Location(0, 0);
+                for (int col = 0; col < currentCols; col++) {
+                    for (int row = 0; row < ROWS; row++) {
+                        if (board[col][row] != null) {
+                            lastLocation = new Location(col, row);
+                        }
+                    }
+                }
+
+                // Replace the selected locations with the last non-empty location
+                board[locationToReplace.getCol()][locationToReplace.getRow()] = board[lastLocation.getCol()][lastLocation.getRow()];
+
+                board[lastLocation.getCol()][lastLocation.getRow()] = null; // Remove the card
+            }
+
+            cardsInPlay -= 3;
+
+        } else if (cardsInPlay == 12 && deck.size() > 0) {
+            for (Location location : selectedLocs) {
+                board[location.getCol()][location.getRow()] = deck.deal();
+            }
+        }
 }
     
     //Precondition: Three cards have been selected by the player
@@ -65,11 +96,14 @@ public class Grid {
             score += 10;
             removeSet();
            if (isGameOver()) {
-                // YOU WRITE THIS
-        } else {
+                state = State.GAME_OVER;
+                runningTimerEnd = millis();
+                score = timerScore();
+                message = 7;
+            } else {
                 state = State.PLAYING;
                 message = 1;
-        }
+            }
         } else {
             score -= 5;
             state = State.PLAYING;
@@ -153,16 +187,43 @@ public class Grid {
 }
     
     public void addColumn() {
+        // If there are no more cards in the deck, change the message number so this will be indicated and back out of the method. return with no inputs is how to break out of a void method.
+        // If there are no sets on the board, then add five points to the player's score and add three new cards to the board. Change the message number to indicate that cards have been added to the board. Use the addCardToBoard method appropriately.
+        // If there is a set on the board, subtract five points from the player's score and change the message number to indicate that there is a set on the board.
         // YOU WRITE THIS
-}
+
+        if (deck.size() == 0) {
+            message = 5;
+            return;
+        }
+
+        boolean hasSet;
+
+        if (findSet().size() == 0) {
+            hasSet = false;
+        } else {
+            hasSet = true;
+        }
+        
+        if (hasSet) {
+            message = 4;
+            score -= 5;
+        } else if (!(hasSet)) {
+            message = 6;
+            score += 5;
+            for (int i = 0; i < 3; i++) {
+                addCardToBoard(deck.deal());
+            }
+        }
+    }
     
     
     //GAME PROCEDURES
     
     public boolean isGameOver() {
         // YOU WRITE THIS
-        return false;
-}
+        return (deck.size() == 0 && findSet().size() == 0);
+    }
     
     public boolean tripleSelected() {
         return(selectedLocs.size() == 3);
