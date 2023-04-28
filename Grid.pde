@@ -222,6 +222,10 @@ public class Grid {
     
     public boolean isGameOver() {
         // YOU WRITE THIS
+
+        if (DEBUG)
+            System.out.println("Game Over:" + (deck.size() == 0 && findSet().size() == 0));
+
         return (deck.size() == 0 && findSet().size() == 0);
     }
     

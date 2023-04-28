@@ -84,6 +84,8 @@ public int setTimer = 0;
 public int runningTimerStart;
 public int timeElapsed = 0;
 
+// DEBUGGING
+public final boolean DEBUG = false;
 
 // state:
 //   0 -> Normal play
