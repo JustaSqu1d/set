@@ -26,11 +26,11 @@ void showTimer() {
     //Otherwise, show time elapsed so far in current game
     if(state == State.PAUSED) {
         text("Time: " + timeElapsed / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
-} else if (state == State.GAME_OVER) { 
-        text("Time: " + (runningTimerEnd - runningTimerStart + timeElapsed) / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
-} else {
-        text("Time: " + (millis() - runningTimerStart + timeElapsed) / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
-}
+    } else if (state == State.GAME_OVER) { 
+            text("Time: " + (runningTimerEnd - runningTimerStart + timeElapsed) / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
+    } else {
+            text("Time: " + (millis() - runningTimerStart + timeElapsed) / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
+    }
 }
 
 public int timerScore() {
@@ -41,5 +41,5 @@ public int timerScore() {
     //
     //If it took 277 seconds to finish the game, this should return 23 (300-277=23)
     //If it took 435 seconds to finish the game, this should return 0 (435 > 300)
-    return 0;
+    return max(300 - (timeElapsed) / 1000, 0);
 }
