@@ -3,11 +3,6 @@
  */
 public class Deck {
     /** 
-     * The length of each sheet in the deck. 
-     */
-    private static final int SHEET_LENGTH = 4;
-    
-    /** 
      * The list of cards in the deck. 
      */
     private ArrayList<Card> cards = new ArrayList<Card>();
