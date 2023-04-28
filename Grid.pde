@@ -14,7 +14,7 @@ public class Grid {
     
     public Grid() { 
         cardsInPlay = 0;
-}
+    }
     
     
     //GRID MUTATION PROCEDURES
@@ -57,37 +57,35 @@ public class Grid {
         
         // YOU WRITE THIS
 
-        if (cardsInPlay > 12 || deck.size() == 0) {
-            // Remove the selected set-cards from the board
-            for (Location location : selectedLocs) {
-                board[location.getCol()][location.getRow()] = null;
-            }
-
-            for (Location locationToReplace : selectedLocs) {
-                // Find the last non-empty location in the grid
-                Location lastLocation = new Location(0, 0);
-                for (int col = 0; col < currentCols; col++) {
-                    for (int row = 0; row < ROWS; row++) {
-                        if (board[col][row] != null) {
-                            lastLocation = new Location(col, row);
-                        }
-                    }
-                }
-
-                // Replace the selected locations with the last non-empty location
-                board[locationToReplace.getCol()][locationToReplace.getRow()] = board[lastLocation.getCol()][lastLocation.getRow()];
-
-                board[lastLocation.getCol()][lastLocation.getRow()] = null; // Remove the card
-            }
-
-            cardsInPlay -= 3;
-
-        } else if (cardsInPlay == 12 && deck.size() > 0) {
+        if (cardsInPlay == 12 && deck.size() != 0) { 
+            // When there are 12 cards on the board, delete the 3 cards being selected and replace them with new ones
             for (Location location : selectedLocs) {
                 board[location.getCol()][location.getRow()] = deck.deal();
             }
+        } else {
+        // When there are more than 12 cards on the board or there are no more cards in the deck
+            int ind = 0;
+            for (int i = 0; i < ROWS; i++) {
+                boolean isInArray = false; // variable to check whether the position (currentCols-1, i) is in the Arraylist selectedLocs
+                for (int j = 0; j < selectedLocs.size(); j++) {
+                    if (selectedLocs.get(j).equals(new Location(currentCols-1, i))) { // if the position (currentCols-1, i) is in the arraylist currentLocs, then isInArray=true
+                        isInArray = true;
+                        break;
+                    }
+                }
+                // If the card is in the Arraylist currentLocs, then we don't need to care about it as it is going to be removed anyways
+                if (!isInArray) { // otherwise
+                    // We move the card at (currentCols, 1) to one of the removed positions
+                    board[selectedLocs.get(ind).getCol()][selectedLocs.get(ind).getRow()] = board[currentCols - 1][i];
+                    ind++; // and we move on to the next removed position
+                }
+                board[currentCols - 1][i] = null; // Remove the column
+                
+            }
+            currentCols--; // Update the currentCols varible
+            cardsInPlay-=3; // Decrease the cards on the board counter by 3
         }
-}
+    }
     
     //Precondition: Three cards have been selected by the player
     //Postcondition: Game state, score, game message mutated, selected cards list cleared
@@ -98,7 +96,7 @@ public class Grid {
            if (isGameOver()) {
                 state = State.GAME_OVER;
                 runningTimerEnd = millis();
-                score = timerScore();
+                score += timerScore();
                 message = 7;
             } else {
                 state = State.PLAYING;
@@ -168,21 +166,16 @@ public class Grid {
     //the number of cardsInPlay has been increased by one
     public void addCardToBoard(Card card) {
         // YOU WRITE THIS
-        if (cardsInPlay == 12) 
-          return;
-        
-        else {
-          for (int col = 0; col < currentCols; col++) {
+        for (int col = 0; col < currentCols; col++) {
             for (int row  = 0; row < ROWS; row++) {
-              Card cardAtLocation = board[col][row];
-              
-              if (!(cardAtLocation instanceof Card)) {
-                board[col][row] = card;
-                cardsInPlay++;
-                return;
-              }
+                Card cardAtLocation = board[col][row];
+                
+                if (!(cardAtLocation instanceof Card)) {
+                    board[col][row] = card;
+                    cardsInPlay++;
+                    return;
+                }
             }
-          }
         }
 }
     
@@ -197,21 +190,16 @@ public class Grid {
             return;
         }
 
-        boolean hasSet;
-
-        if (findSet().size() == 0) {
-            hasSet = false;
-        } else {
-            hasSet = true;
-        }
+        boolean hasSet = !(findSet().size() == 0);
         
         if (hasSet) {
             message = 4;
             score -= 5;
         } else if (!(hasSet)) {
-            message = 6;
+            message = 3;
             score += 5;
-            for (int i = 0; i < 3; i++) {
+            currentCols++;
+            for (int i = 0; i < ROWS; i++) {
                 addCardToBoard(deck.deal());
             }
         }
