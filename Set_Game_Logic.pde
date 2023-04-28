@@ -1,40 +1,40 @@
 boolean sameColor(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Same Colors
     return allEqual(getColor(a).ordinal(), getColor(b).ordinal(), getColor(c).ordinal());
 }
 
 boolean sameShape(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Same Shapes
     return allEqual(getShape(a).ordinal(), getShape(b).ordinal(), getShape(c).ordinal());
 }
 
 boolean sameFill(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Same Shape Fill
     return allEqual(getFill(a).ordinal(), getFill(b).ordinal(), getFill(c).ordinal());
 }
 
 boolean sameCount(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Same Shape Count
     return allEqual(getCount(a), getCount(b), getCount(c));
 }
 
 boolean diffColor(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Different Colors
     return allDifferent(getColor(a).ordinal(), getColor(b).ordinal(), getColor(c).ordinal());
 }
 
 boolean diffShape(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Different Shapes
     return allDifferent(getShape(a).ordinal(), getShape(b).ordinal(), getShape(c).ordinal());
 }
 
 boolean diffFill(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Different Shape Fill
     return allDifferent(getFill(a).ordinal(), getFill(b).ordinal(), getFill(c).ordinal());
 }
 
 boolean diffCount(Card a, Card b, Card c) {
-    //YOU WRITE THIS
+    // Different Shape Count
     return allDifferent(getCount(a), getCount(b), getCount(c));
 }  
 
@@ -61,10 +61,12 @@ boolean isSet(Card a, Card b, Card c) {
 }
 
 boolean allEqual(int one, int two, int three) {
+    // All Equal
     return (one==two) && (one==three) && (two==three);
 }
 
 boolean allDifferent(int one, int two, int three) {
+    // All Different
     return (one!=two) && (one!=three) && (two!=three);
 }
 
