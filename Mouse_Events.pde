@@ -20,7 +20,11 @@ int clickedCol = -1;
 int buttonSelected = -1;
 int buttonReleased = -1;
 
-
+/**
+ * This method is called when the mouse is pressed.
+ * If the mouse is within the grid, determine which cell was clicked and update clickedRow and clickedCol.
+ * If the mouse is within a button, determine which button was clicked and set buttonSelected.
+ */
 void mousePressed() {  
     if(between(mouseX, GRID_LEFT_OFFSET, grid.rightOffset()) && 
         between(mouseY, GRID_TOP_OFFSET, GRID_BOTTOM)) {
