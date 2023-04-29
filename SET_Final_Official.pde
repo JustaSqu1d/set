@@ -96,10 +96,10 @@ public final boolean DEBUG = false;
 public enum State { PLAYING, EVAL_SET, FIND_SET, GAME_OVER, PAUSED };
 State state = State.PLAYING;
 
+/**
+* Sets up the game. This method is called once when the game starts.
+*/
 void setup() {
-  /**
-  * Sets up the game. This method is called once when the game starts.
-  */
   size(1056, 568, P3D);
   background(BACKGROUND_COLOR);
   
@@ -112,11 +112,10 @@ void setup() {
   
   initSpriteSheet();
 }
-
+/**
+* Draws everything in the game. This method is called 60 times per second.
+*/
 void draw() {
-  /**
-  * Draws everything in the game. This method is called 60 times per second.
-  */
   background(BACKGROUND_COLOR);
   
   showScore();
@@ -152,48 +151,47 @@ void draw() {
   }
 }
 
+/**
+* Draws a card from the sprite sheet.
+*/
 // For details on the 8-argument version of image(), see:
 // https://forum.processing.org/one/topic/image-ing-a-part-of-a-pimage.html
 void drawCard(int cardCol, int cardRow, int xpos, int ypos) {
-  /**
-  * Draws a card from the sprite sheet.
-  */
   image(cimg, xpos, ypos, CARD_WIDTH+CARD_X_SPACER, CARD_HEIGHT+CARD_Y_SPACER,
               LEFT_OFFSET + cardCol*CARD_WIDTH, TOP_OFFSET + cardRow*CARD_HEIGHT, 
               (cardCol+1)*CARD_WIDTH+CARD_X_SPACER, (cardRow+1)*CARD_HEIGHT+CARD_Y_SPACER);
 }
 
+/**
+* Draws a row of cards.
+*/
 void drawRow(int row) {
-  /**
-  * Draws a row of cards.
-  */
   for (int col = 0; col < SHEET_LENGTH; col++)  {
     drawCard(col, row, col*(CARD_WIDTH+CARD_X_SPACER), row*(CARD_HEIGHT+CARD_Y_SPACER));
   }
 }
-
+/**
+* Draws the deck.
+*/
 void drawDeck() {
-  /**
-  * Draws the deck.
-  */
   for (int row = 0; row < ROWS; row++) {
     drawRow(row);
   }
 }
 
-void drawCards() {
-  /**
-  * Draws the cards.
-  */
+/**
+* Draws the cards.
+*/
+void drawCards() {  
   for (int row = 0; row < SHEET_LENGTH; row++) {
     drawRow(row);
   }
 }
-      
+
+/**
+* Draws the buttons.
+*/
 void drawButtons() {
-  /**
-  * Draws the buttons.
-  */
   // Start, Stop, Clear rectangles in gray
   fill(#DDDDDD);
   for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -213,10 +211,10 @@ void drawButtons() {
   }
 }
 
+/**
+* Starts a new game.
+*/
 public void newGame() {
-  /**
-  * Starts a new game.
-  */
   // Do NOT redeclare existing variables.  For example, when creating a new
   // deck, you want to write
   //
@@ -256,10 +254,10 @@ public void newGame() {
   
 }
 
+/**
+* Initializes the fonts used in the game.
+*/
 public void initFonts() {
-  /**
-  * Initializes the fonts used in the game.
-  */
   scoreFont = createFont("ComicSansMS-Bold", 32);
   messageFont = scoreFont;
   timerFont = scoreFont;
@@ -267,19 +265,19 @@ public void initFonts() {
   textAlign(LEFT, CENTER);
 }
 
+/**
+* Draws the directions for the game.
+*/
 public void drawDirections() {
-  /**
-  * Draws the directions for the game.
-  */
   fill(KEY_OPTIONS_FILL);
   textFont(keyOptionsFont);
   text(keyOptions, KEY_OPTIONS_LEFT_OFFSET, KEY_OPTIONS_TOP_OFFSET);
 }
 
+/**
+* Loads the sprite sheet of cards.
+*/
 public void initSpriteSheet() {
-  /**
-  * Loads the sprite sheet of cards.
-  */
   // NOTE: These cards are being used for educational purposes only and are not to be used
   // for profit without written consent by copyright holder(s).
   //String url = "https://amiealbrecht.files.wordpress.com/2016/08/set-cards.jpg?w=1250";
@@ -288,20 +286,19 @@ public void initSpriteSheet() {
   cimg = loadImage(imageFile, "jpg");  
 }
 
-void showScore() {
   /**
   * Shows the score.
   */
+void showScore() {
   textFont(scoreFont);
   fill(SCORE_FILL);
   text("Score: " + score, SCORE_LEFT_OFFSET, SCORE_TOP_OFFSET);
 }
 
+/**
+* Shows the message in the message area.
+*/
 public void showMessage() {
-  /**
-  * Shows the message in the message area.
-  */
-
   textFont(messageFont);
   String str = "";
   switch(message) {

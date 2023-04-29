@@ -188,13 +188,13 @@ public class Grid {
         }
     }
     
+    /**
+    * Draws a highlighted rectangle at the specified Location with the given highlight color.
+    * 
+    * @param loc           the Location to draw the highlight at
+    * @param highlightColor the color of the highlight as a Processing color value
+    */
     public void drawHighlight(Location loc, color highlightColor) {
-        /**
-        * Draws a highlighted rectangle at the specified Location with the given highlight color.
-        * 
-        * @param loc           the Location to draw the highlight at
-        * @param highlightColor the color of the highlight as a Processing color value
-        */
         stroke(highlightColor);
         strokeWeight(5);
         noFill();

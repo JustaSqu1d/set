@@ -1,12 +1,12 @@
+/**
+* Checks if a double value is between two other double values.
+* 
+* @param a the double value to check
+* @param low the lower bound of the range (inclusive)
+* @param high the upper bound of the range (inclusive)
+* @return true if a is between low and high (inclusive), false otherwise
+*/
 public boolean between(double a, double low, double high) {
-  /**
-  * Checks if a double value is between two other double values.
-  * 
-  * @param a the double value to check
-  * @param low the lower bound of the range (inclusive)
-  * @param high the upper bound of the range (inclusive)
-  * @return true if a is between low and high (inclusive), false otherwise
-  */
   return(a >= low) && (a <= high);
 }
 
@@ -15,14 +15,13 @@ public boolean between(double a, double low, double high) {
   */
 public enum Color { WARPED, PURPUR, CRIMSON, KAICHENG };
 
-public Color getColor (Card card) {
-  /**
+/**
   * Gets the color of a given Set card.
   * 
   * @param card the card whose color to return
   * @return the color of the card
   */
-
+public Color getColor (Card card) {
   Color cardColor;
   
   int column = card.getCol();
@@ -54,13 +53,13 @@ public Color getColor (Card card) {
   */
 public enum Shape { DIAMOND, CYLINDER, WAVE, CONE };
 
-public Shape getShape(Card card) {
-  /**
+/**
   * Gets the shape of a given Set card.
   * 
   * @param card the card whose shape to return
   * @return the shape of the card
   */
+public Shape getShape(Card card) {
   int column = card.getCol();
 
   Shape shape;
@@ -93,14 +92,13 @@ public Shape getShape(Card card) {
   */
 public enum Fill { SOLID, WIRED, EMPTY, IDK };
 
-public Fill getFill(Card card) {
-  /**
+/**
   * Gets the fill of a given Set card.
   * 
   * @param card the card whose fill to return
   * @return the fill of the card
   */
-  
+public Fill getFill(Card card) {
   int row = card.getRow();
 
   Fill fill;
@@ -127,13 +125,13 @@ public Fill getFill(Card card) {
   return fill;
 }
 
+/**
+  * Returns the number of shapes on the given card.
+  *
+  * @param card the card to get the count from
+  * @return the number of shapes on the card
+  */
 public int getCount(Card card) {
-  /**
- * Returns the number of shapes on the given card.
- *
- * @param card the card to get the count from
- * @return the number of shapes on the card
- */
   int row = card.getRow();
 
   int count = (row % 3) + 1;

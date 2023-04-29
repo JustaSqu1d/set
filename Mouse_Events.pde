@@ -47,9 +47,9 @@ void mousePressed() {
                 mousey = mouseY;
                 // 0: Add Cards, 1: Find Set, 2: New Game, 3: Pause Game
                 buttonSelected = i;
+            }   
         }
-        }
-}
+    }
 }
 
 void mouseReleased() {
@@ -67,31 +67,32 @@ void mouseReleased() {
         
         if ((between(xPos,CARD_WIDTH + 1,CARD_WIDTH + GRID_X_SPACER) || 
             between(yPos,CARD_HEIGHT + 1,CARD_HEIGHT + GRID_Y_SPACER))) {
+        
         } else {
             int col = (mouseX - GRID_LEFT_OFFSET) / (CARD_WIDTH + GRID_X_SPACER);
             int row = (mouseY - GRID_TOP_OFFSET) / (CARD_HEIGHT + GRID_Y_SPACER);
-           if (row == clickedRow && col == clickedCol) {
+            if (row == clickedRow && col == clickedCol) {
                 grid.updateSelected(clickedCol, clickedRow);
+            }
         }
-        }
-} else {  // Figure out if a button was clicked and, if so, which one
+    } else {  // Figure out if a button was clicked and, if so, which one
         for (int i = 0; i < NUM_BUTTONS; i++) {
            if (between(mouseX, BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12), BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12) + BUTTON_WIDTH) && 
                 between(mouseY, BUTTON_TOP_OFFSET, BUTTON_TOP_OFFSET + BUTTON_HEIGHT)) {
                 buttonReleased = i;
-        }
+            }
         }
         if (buttonSelected == buttonReleased && buttonReleased >= 0) {
-           if (buttonReleased == 2) {
+            if (buttonReleased == 2) {
                 newGame();
-        } else if (state != State.GAME_OVER) {
+            } else if (state != State.GAME_OVER) {
                 switch(buttonReleased) {
                     case 0 : grid.addColumn(); break;
                     case 1 : state = State.FIND_SET; highlightCounter = 0; break;
                     case 3 : togglePauseResume(); break;
                     default : break;
                 }
-        }
+            }
         }
     }
 }
