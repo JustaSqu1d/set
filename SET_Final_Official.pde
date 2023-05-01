@@ -87,6 +87,9 @@ public int timeElapsed = 0;
 // DEBUGGING
 public final boolean DEBUG = false;
 
+// HIGH SCORE
+public int highScore;
+
 // state:
 //   0 -> Normal play
 //   1 -> Three cards selected (for freezing highlights)
@@ -316,4 +319,26 @@ public void showMessage() {
     default: str = "Something is wrong. :-(";
   }
   text(str, MESSAGE_LEFT_OFFSET, MESSAGE_TOP_OFFSET);
+}
+
+
+/**
+* Loads the high score.
+*/
+public void initHighScore() {
+  String[] lines = loadStrings("highscore.txt");
+  if (lines.length > 0) {
+    highScore = Integer.parseInt(lines[0]);
+  } else {
+    highScore = 0;
+  }
+}
+
+/**
+* Saves the high score.
+*/
+public void saveHighScore() {
+  String[] lines = new String[1];
+  lines[0] = str(highScore);
+  saveStrings("highscore.txt", lines);
 }
