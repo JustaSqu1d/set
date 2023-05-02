@@ -38,7 +38,7 @@ void mousePressed() {
             clickedRow = (mouseY - GRID_TOP_OFFSET) / (CARD_HEIGHT + GRID_Y_SPACER);
             //grid.updateSelected(clickedCol, clickedRow);
         }
-} else {
+    } else {
         buttonSelected = -1;
         for (int i = 0; i < NUM_BUTTONS; i++) {
            if (between(mouseX, BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12), BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12) + BUTTON_WIDTH) && 
@@ -58,7 +58,7 @@ void mouseReleased() {
     buttonReleased = -1;
     
     //If the click was on the grid, toggle the appropriate cell
-    if(between(mouseX, GRID_LEFT_OFFSET, grid.rightOffset()) && 
+    if (between(mouseX, GRID_LEFT_OFFSET, grid.rightOffset()) && 
         between(mouseY, GRID_TOP_OFFSET, GRID_BOTTOM) && 
         !(state == State.GAME_OVER) && 
         !(state == State.PAUSED)) {
@@ -90,9 +90,22 @@ void mouseReleased() {
                     case 0 : grid.addColumn(); break;
                     case 1 : state = State.FIND_SET; highlightCounter = 0; break;
                     case 3 : togglePauseResume(); break;
+                    case 4 : toggleGamemode(); break;
                     default : break;
                 }
             }
         }
+    }
+}
+
+/**
+* This method toggles the gamemode between normal and survival
+*/
+void toggleGamemode() {
+    newGame();
+    if (gamemode == Gamemode.REGULAR) {
+        gamemode = Gamemode.SURVIVAL;
+    } else {
+        gamemode = Gamemode.REGULAR;
     }
 }
