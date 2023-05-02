@@ -128,12 +128,7 @@ public class Grid {
         if (isSet(selectedCards.get(0), selectedCards.get(1), selectedCards.get(2))) {
             score += 10;
             removeSet();
-            if (isGameOver()) {
-                state = State.GAME_OVER;
-                runningTimerEnd = millis();
-                score += timerScore();
-                message = 7;
-            } else {
+            if (!isGameOver()) {
                 state = State.PLAYING;
                 message = 1;
             }
@@ -142,15 +137,6 @@ public class Grid {
             message = 2;
             if (gamemode == Gamemode.SURVIVAL) {
                 strikes += 1;
-                if (isGameOver()) {
-                    state = State.GAME_OVER;
-                    runningTimerEnd = millis();
-                    message = 7;
-                    if (score > highScore) {
-                        highScore = score;
-                        saveHighScore();
-                    }
-                }
             } else if (gamemode == Gamemode.REGULAR) {
                 score -= 5;
             }
@@ -283,26 +269,6 @@ public class Grid {
     
     
     //GAME PROCEDURES
-    
-    /**
-    * Determines whether the game is over or not.
-    *
-    * @return true if there are no more cards in the deck and no more sets can be formed, false otherwise.
-    */
-    public boolean isGameOver() {
-        // YOU WRITE THIS
-        
-        if (DEBUG)
-            System.out.println("Game Over:" + (deck.size() == 0 && findSet().size() == 0));
-        
-        if (gamemode == Gamemode.REGULAR) {
-            return(deck.size() == 0 && findSet().size() == 0);
-        } else if (gamemode == Gamemode.SURVIVAL) {
-            return(deck.size() == 0 && findSet().size() == 0) || (strikes == MAX_STRIKES);
-        } else {
-            return false;
-        }
-    }
     
     /**
     * Checks if three locations have been selected on the game board.

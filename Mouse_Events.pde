@@ -45,7 +45,7 @@ void mousePressed() {
                 between(mouseY, BUTTON_TOP_OFFSET, BUTTON_TOP_OFFSET + BUTTON_HEIGHT)) {
                 mousex = mouseX;
                 mousey = mouseY;
-                // 0: Add Cards, 1: Find Set, 2: New Game, 3: Pause Game
+                // 0: Add Cards, 1: Find Set, 2: New Game, 3: Pause Game, 4: Toggle Gamemode
                 buttonSelected = i;
             }   
         }
@@ -85,12 +85,13 @@ void mouseReleased() {
         if (buttonSelected == buttonReleased && buttonReleased >= 0) {
             if (buttonReleased == 2) {
                 newGame();
+            } else if (buttonReleased == 4) {
+                toggleGamemode();
             } else if (state != State.GAME_OVER) {
                 switch(buttonReleased) {
                     case 0 : grid.addColumn(); break;
                     case 1 : state = State.FIND_SET; highlightCounter = 0; break;
                     case 3 : togglePauseResume(); break;
-                    case 4 : toggleGamemode(); break;
                     default : break;
                 }
             }
