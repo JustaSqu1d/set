@@ -1,7 +1,7 @@
 /**
- * A Grid class that represents the board and cards in a SET game.
- * The board contains the grid of cards and is typically called the board.
- */
+* A Grid class that represents the board and cards in a SET game.
+* The board contains the grid of cards and is typically called the board.
+*/
 public class Grid {
     //In the physical SET game, cards are placed on the table.
     //The table contains the grid of cards and is typically called the board.
@@ -12,23 +12,23 @@ public class Grid {
     Card[][] board = new Card[MAX_COLS][ROWS];   
     
     /**
-     * Locations selected by the player.
-     */
+    * Locations selected by the player.
+    */
     ArrayList<Location> selectedLocs = new ArrayList<Location>();
-
+    
     /**
-     * Cards selected by the player (corresponds to the locations).
-     */
+    * Cards selected by the player (corresponds to the locations).
+    */
     ArrayList<Card> selectedCards = new ArrayList<Card>();
     
-     /**
-     * Number of cards visible on the board.
-     */
+    /**
+    * Number of cards visible on the board.
+    */
     int cardsInPlay;
     
     /**
-     * Constructor for the Grid class.
-     */
+    * Constructor for the Grid class.
+    */
     public Grid() { 
         cardsInPlay = 0;
     }
@@ -63,15 +63,15 @@ public class Grid {
     }
     
     /**
-     * Removes the selected set of cards from the board, adjusts the number of columns as needed,
-     * and mutates the board to reflect the removal of the set.
-     * 
-     * Precondition: A Set has been successfully found
-     * Postconditions:
-     * - The number of columns is adjusted as needed to reflect removal of the set
-     * - The number of cards in play is adjusted as needed
-     * - The board is mutated to reflect removal of the set
-     */
+    * Removes the selected set of cards from the board, adjusts the number of columns as needed,
+    * and mutates the board to reflect the removal of the set.
+    * 
+    * Precondition: A Set has been successfully found
+    * Postconditions:
+    * - The number of columns is adjusted as needed to reflect removal of the set
+    * - The number of cards in play is adjusted as needed
+    * - The board is mutated to reflect removal of the set
+    */
     public void removeSet() {
         // Because it seems to make for a better UX, cards should not change locations unless
         // the number of columns has decreased.  If that happens, cards from the rightmost
@@ -85,19 +85,19 @@ public class Grid {
         // documentation on ArrayList to see how sort(null) works
         
         // YOU WRITE THIS
-
+        
         if (cardsInPlay == 12 && deck.size() != 0) { 
             // When there are 12 cards on the board, delete the 3 cards being selected and replace them with new ones
             for (Location location : selectedLocs) {
                 board[location.getCol()][location.getRow()] = deck.deal();
             }
         } else {
-        // When there are more than 12 cards on the board or there are no more cards in the deck
+            // When there are more than 12 cards on the board or there are no more cards in the deck
             int ind = 0;
             for (int i = 0; i < ROWS; i++) {
                 boolean isInArray = false; // variable to check whether the position (currentCols-1, i) is in the Arraylist selectedLocs
                 for (int j = 0; j < selectedLocs.size(); j++) {
-                    if (selectedLocs.get(j).equals(new Location(currentCols-1, i))) { // if the position (currentCols-1, i) is in the arraylist currentLocs, then isInArray=true
+                    if (selectedLocs.get(j).equals(new Location(currentCols - 1, i))) { // if the position (currentCols-1, i) is in the arraylist currentLocs, then isInArray=true
                         isInArray = true;
                         break;
                     }
@@ -112,23 +112,23 @@ public class Grid {
                 
             }
             currentCols--; // Update the currentCols varible
-            cardsInPlay-=3; // Decrease the cards on the board counter by 3
+            cardsInPlay -= 3; // Decrease the cards on the board counter by 3
         }
     }
     
     /**
-     * Processes a triple of selected cards. If the cards form a valid set,
-     * updates the game state, score, and game message, and clears the selected cards list.
-     * If the cards do not form a valid set, updates the game state and message, and clears the selected cards list.
-     * 
-     * Precondition: Three cards have been selected by the player.
-     * Postcondition: Game state, score, game message mutated, selected cards list cleared.
-     */
+    * Processes a triple of selected cards. If the cards form a valid set,
+    * updates the game state, score, and game message, and clears the selected cards list.
+    * If the cards do not form a valid set, updates the game state and message, and clears the selected cards list.
+    * 
+    * Precondition: Three cards have been selected by the player.
+    * Postcondition: Game state, score, game message mutated, selected cards list cleared.
+    */
     public void processTriple() {
         if (isSet(selectedCards.get(0), selectedCards.get(1), selectedCards.get(2))) {
             score += 10;
             removeSet();
-           if (isGameOver()) {
+            if (isGameOver()) {
                 state = State.GAME_OVER;
                 runningTimerEnd = millis();
                 score += timerScore();
@@ -138,17 +138,30 @@ public class Grid {
                 message = 1;
             }
         } else {
-            score -= 5;
             state = State.PLAYING;
             message = 2;
+            if (gamemode == Gamemode.SURVIVAL) {
+                strikes += 1;
+                if (isGameOver()) {
+                    state = State.GAME_OVER;
+                    runningTimerEnd = millis();
+                    message = 7;
+                    if (score > highScore) {
+                        highScore = score;
+                        saveHighScore();
+                    }
+                }
+            } else if (gamemode == Gamemode.REGULAR) {
+                score -= 5;
+            }
         }
         clearSelected();
     }
     
     
     /**
-     * Displays the board on the GUI.
-     */
+    * Displays the board on the GUI.
+    */
     public void display() {
         int cols = cardsInPlay / 3;
         for (int col = 0; col < cols; col++) {
@@ -172,10 +185,10 @@ public class Grid {
         if (state == State.FIND_SET) {
             highlight = FOUND_HIGHLIGHT;
             selectedLocs = findSet();
-           if (selectedLocs.size() == 0) {
+            if (selectedLocs.size() == 0) {
                 message = 6;
                 return;
-        }
+            }
         } else if (selectedLocs.size() < 3) {
             highlight = SELECTED_HIGHLIGHT;
         } else {
@@ -234,8 +247,8 @@ public class Grid {
             }
         }
     }
-
-
+    
+    
     /**
     * Adds a column of cards to the board according to game rules.
     * If there are no more cards in the deck, changes the message number to indicate this and returns without making any changes to the board.
@@ -247,12 +260,12 @@ public class Grid {
         // If there are no sets on the board, then add five points to the player's score and add three new cards to the board. Change the message number to indicate that cards have been added to the board. Use the addCardToBoard method appropriately.
         // If there is a set on the board, subtract five points from the player's score and change the message number to indicate that there is a set on the board.
         // YOU WRITE THIS
-
+        
         if (deck.size() == 0) {
             message = 5;
             return;
         }
-
+        
         boolean hasSet = !(findSet().size() == 0);
         
         if (hasSet) {
@@ -278,11 +291,17 @@ public class Grid {
     */
     public boolean isGameOver() {
         // YOU WRITE THIS
-
+        
         if (DEBUG)
             System.out.println("Game Over:" + (deck.size() == 0 && findSet().size() == 0));
-
-        return (deck.size() == 0 && findSet().size() == 0);
+        
+        if (gamemode == Gamemode.REGULAR) {
+            return(deck.size() == 0 && findSet().size() == 0);
+        } else if (gamemode == Gamemode.SURVIVAL) {
+            return(deck.size() == 0 && findSet().size() == 0) || (strikes == MAX_STRIKES);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -317,7 +336,7 @@ public class Grid {
         for (int i = 0; i < currentCols * 3 - 2; i++) {
             for (int j = i + 1; j < currentCols * 3 - 1; j++) {
                 for (int k = j + 1; k < currentCols * 3; k++) {
-                   if (isSet(board[col(i)][row(i)], board[col(j)][row(j)], board[col(k)][row(k)])) {
+                    if (isSet(board[col(i)][row(i)], board[col(j)][row(j)], board[col(k)][row(k)])) {
                         locs.add(new Location(col(i), row(i)));
                         locs.add(new Location(col(j), row(j)));
                         locs.add(new Location(col(k), row(k)));
