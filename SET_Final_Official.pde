@@ -33,7 +33,7 @@ final int BUTTON_WIDTH = 200;
 final int BUTTON_HEIGHT = 56;
 
 // Four buttons: Add Cards, Find Set, New Game, Pause
-public final int NUM_BUTTONS = 4;
+public final int NUM_BUTTONS = 5;
 
 Grid grid;
 Deck deck;
@@ -50,7 +50,7 @@ public PFont timerFont;
 public final color TIMER_FILL = #000000;
 public int runningTimer;
 public int runningTimerEnd;
-public final int TIMER_LEFT_OFFSET = SCORE_LEFT_OFFSET+256;
+public final int TIMER_LEFT_OFFSET = SCORE_LEFT_OFFSET+512;
 public final int TIMER_TOP_OFFSET = SCORE_TOP_OFFSET;
 
 // Message information
@@ -87,6 +87,15 @@ public int timeElapsed = 0;
 // DEBUGGING
 public final boolean DEBUG = false;
 
+// HIGH SCORE
+public int highScore;
+
+// GAMEMODE SPECIFIC
+public enum Gamemode { REGULAR, SURVIVAL };
+Gamemode gamemode = Gamemode.REGULAR;
+public int strikes = 0;
+public int MAX_STRIKES = 3;
+
 // state:
 //   0 -> Normal play
 //   1 -> Three cards selected (for freezing highlights)
@@ -111,7 +120,10 @@ void setup() {
   initFonts();  
   
   initSpriteSheet();
+
+  initHighScore();
 }
+
 /**
 * Draws everything in the game. This method is called 60 times per second.
 */
@@ -144,10 +156,18 @@ void draw() {
     if (highlightCounter == FIND_SET_TICKS) {  // 35 ticks showing special highlight
       state = State.PLAYING;
       grid.clearSelected();
-      score -= 5;
+      if (gamemode == Gamemode.REGULAR) {
+        score -= 5;
+      } else {
+        strikes += 1;
+      }
     } else {
       highlightCounter = highlightCounter + 1;
     }
+  }
+
+  if (isGameOver() && state != State.GAME_OVER) {
+    gameOver();
   }
 }
 
@@ -209,6 +229,11 @@ void drawButtons() {
   } else {
     text("Pause", BUTTON_LEFT_OFFSET+54+3*(BUTTON_WIDTH+12), BUTTON_TOP_OFFSET+22);
   }
+  if (gamemode == Gamemode.REGULAR) {
+    text("Survival Mode", BUTTON_LEFT_OFFSET+54+4*(BUTTON_WIDTH+12), BUTTON_TOP_OFFSET+22);
+  } else {
+    text("Regular Mode", BUTTON_LEFT_OFFSET+45+4*(BUTTON_WIDTH+12), BUTTON_TOP_OFFSET+22);
+  }
 }
 
 /**
@@ -251,6 +276,8 @@ public void newGame() {
   timeElapsed = 0;
   
   runningTimerStart = millis(); 
+
+  strikes = 0;
   
 }
 
@@ -286,13 +313,17 @@ public void initSpriteSheet() {
   cimg = loadImage(imageFile, "jpg");  
 }
 
-  /**
-  * Shows the score.
-  */
+/**
+* Shows the score.
+*/
 void showScore() {
   textFont(scoreFont);
   fill(SCORE_FILL);
-  text("Score: " + score, SCORE_LEFT_OFFSET, SCORE_TOP_OFFSET);
+  if (gamemode == Gamemode.REGULAR) {
+    text("Score: " + score, SCORE_LEFT_OFFSET, SCORE_TOP_OFFSET);
+  } else {
+    text("Score: " + score + "   Strikes: " + strikes + " / " + MAX_STRIKES, SCORE_LEFT_OFFSET, SCORE_TOP_OFFSET);
+  }
 }
 
 /**
@@ -313,7 +344,66 @@ public void showMessage() {
     case 8: str = "\"" + key + "\"" + " not an active key!"; break;
     case 9: str = "Game paused"; break;
     case 10: str = "Game resumed"; break;
+    case 11: str = "New high score!"; break;
     default: str = "Something is wrong. :-(";
   }
   text(str, MESSAGE_LEFT_OFFSET, MESSAGE_TOP_OFFSET);
+}
+
+/**
+* Loads the high score.
+*/
+public void initHighScore() {
+  String[] lines = loadStrings("highscore.txt");
+  if (lines.length > 0) {
+    highScore = Integer.parseInt(lines[0]);
+  } else {
+    highScore = 0;
+  }
+}
+
+/**
+* Saves the high score.
+*/
+public void saveHighScore() {
+  String[] lines = new String[1];
+  lines[0] = str(highScore);
+  saveStrings("highscore.txt", lines);
+}
+
+/**
+* Does something when the game is over
+*/
+public void gameOver() {
+  state = State.GAME_OVER;
+  runningTimerEnd = millis();
+  message = 7;
+  if (gamemode == Gamemode.REGULAR) {
+    score += timerScore();
+  } else if (gamemode == Gamemode.SURVIVAL) {
+    if (score > highScore) {
+      highScore = score;
+      saveHighScore();
+    }
+  }
+}
+
+/**
+* Determines whether the game is over or not.
+*
+* @return true if there are no more cards in the deck and no more sets can be formed, false otherwise.
+*/
+public boolean isGameOver() {
+    // YOU WRITE THIS
+    
+    if (DEBUG)
+        System.out.println("Game Over:" + (deck.size() == 0 && grid.findSet().size() == 0));
+    
+    if (gamemode == Gamemode.REGULAR) {
+        return(deck.size() == 0 && grid.findSet().size() == 0);
+    } else if (gamemode == Gamemode.SURVIVAL) {
+        return(deck.size() == 0 && grid.findSet().size() == 0) || (strikes == MAX_STRIKES);
+    } else {
+        return false;
+    }
 }

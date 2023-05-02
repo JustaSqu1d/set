@@ -45,7 +45,7 @@ void showTimer() {
     //If the game is paused, show time elapsed
     //If the game is over, show time to complete
     //Otherwise, show time elapsed so far in current game
-    if(state == State.PAUSED) {
+    if (state == State.PAUSED) {
         text("Time: " + timeElapsed / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);
     } else if (state == State.GAME_OVER) { 
             text("Time: " + (runningTimerEnd - runningTimerStart + timeElapsed) / 1000, TIMER_LEFT_OFFSET, TIMER_TOP_OFFSET);

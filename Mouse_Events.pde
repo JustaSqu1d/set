@@ -38,14 +38,14 @@ void mousePressed() {
             clickedRow = (mouseY - GRID_TOP_OFFSET) / (CARD_HEIGHT + GRID_Y_SPACER);
             //grid.updateSelected(clickedCol, clickedRow);
         }
-} else {
+    } else {
         buttonSelected = -1;
         for (int i = 0; i < NUM_BUTTONS; i++) {
            if (between(mouseX, BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12), BUTTON_LEFT_OFFSET + i * (BUTTON_WIDTH + 12) + BUTTON_WIDTH) && 
                 between(mouseY, BUTTON_TOP_OFFSET, BUTTON_TOP_OFFSET + BUTTON_HEIGHT)) {
                 mousex = mouseX;
                 mousey = mouseY;
-                // 0: Add Cards, 1: Find Set, 2: New Game, 3: Pause Game
+                // 0: Add Cards, 1: Find Set, 2: New Game, 3: Pause Game, 4: Toggle Gamemode
                 buttonSelected = i;
             }   
         }
@@ -58,7 +58,7 @@ void mouseReleased() {
     buttonReleased = -1;
     
     //If the click was on the grid, toggle the appropriate cell
-    if(between(mouseX, GRID_LEFT_OFFSET, grid.rightOffset()) && 
+    if (between(mouseX, GRID_LEFT_OFFSET, grid.rightOffset()) && 
         between(mouseY, GRID_TOP_OFFSET, GRID_BOTTOM) && 
         !(state == State.GAME_OVER) && 
         !(state == State.PAUSED)) {
@@ -85,6 +85,8 @@ void mouseReleased() {
         if (buttonSelected == buttonReleased && buttonReleased >= 0) {
             if (buttonReleased == 2) {
                 newGame();
+            } else if (buttonReleased == 4) {
+                toggleGamemode();
             } else if (state != State.GAME_OVER) {
                 switch(buttonReleased) {
                     case 0 : grid.addColumn(); break;
@@ -94,5 +96,17 @@ void mouseReleased() {
                 }
             }
         }
+    }
+}
+
+/**
+* This method toggles the gamemode between normal and survival
+*/
+void toggleGamemode() {
+    newGame();
+    if (gamemode == Gamemode.REGULAR) {
+        gamemode = Gamemode.SURVIVAL;
+    } else {
+        gamemode = Gamemode.REGULAR;
     }
 }
